@@ -21,11 +21,7 @@ function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
   )
 }
 
-function PasswordInput({
-  className,
-  type,
-  ...props
-}: React.ComponentProps<'input'>) {
+function PasswordInput({ className, ...props }: React.ComponentProps<'input'>) {
   const [showPassword, setShowPassword] = useState<boolean>(false)
 
   return (
