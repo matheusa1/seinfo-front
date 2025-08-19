@@ -3,6 +3,8 @@ import { ReactNode } from 'react'
 import './globals.css'
 
 import { Poppins } from 'next/font/google'
+import ReactQueryContextProvider from '@/app/context/react-query.context'
+import { Toaster } from '@/components/ui/sonner'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -21,7 +23,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className}`}>{children}</body>
+      <body className={`${poppins.className}`}>
+        <ReactQueryContextProvider>
+          {children}
+          <Toaster richColors position={'top-right'} closeButton />
+        </ReactQueryContextProvider>
+      </body>
     </html>
   )
 }

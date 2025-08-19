@@ -4,12 +4,14 @@ import { AuthHttpGateway } from './http.gateway'
 import { Container } from 'inversify'
 import { AxiosInstance } from 'axios'
 import { SignUpUseCase } from '../application/sign-up.use.case'
+import { SignInUseCase } from '../application/sign-in.use.case'
 
 const registry = {
   HTTP: Symbol.for('HTTP'),
   AuthHttpGateway: Symbol.for('AuthHttpGateway'),
 
   SignUpUseCase: Symbol.for('SignUpUseCase'),
+  SignInUseCase: Symbol.for('SignInUseCase'),
 }
 
 const container = new Container()
@@ -27,6 +29,13 @@ container
     return new SignUpUseCase(context.get(registry.AuthHttpGateway))
   })
 
+container
+  .bind<SignInUseCase>(registry.SignInUseCase)
+  .toDynamicValue((context) => {
+    return new SignInUseCase(context.get(registry.AuthHttpGateway))
+  })
+
 export const auth = {
   signUp: container.get<SignUpUseCase>(registry.SignUpUseCase),
+  signIn: container.get<SignInUseCase>(registry.SignInUseCase),
 }

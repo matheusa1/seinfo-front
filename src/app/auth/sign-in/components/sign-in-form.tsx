@@ -2,12 +2,7 @@
 
 import { FC } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import {
-  TSignUpInputSchema,
-  TSignUpOutputSchema,
-} from '@/@core/module/auth/domain/sign-up.entity'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { signUpSchema } from '@/@core/module/auth/schema/sign-up.schema'
 import { CardContent, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
@@ -23,35 +18,34 @@ import { useMutation } from '@tanstack/react-query'
 import { auth } from '@/@core/module/auth/infra/container.registry'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { TSignInSchema } from '@/@core/module/auth/domain/sign-in.entity'
+import { signInSchema } from '@/@core/module/auth/schema/sign-in.schema'
 
-const SignUpForm: FC = () => {
-  const form = useForm<TSignUpInputSchema>({
-    resolver: zodResolver(signUpSchema.in),
+const SignInForm: FC = () => {
+  const form = useForm<TSignInSchema>({
+    resolver: zodResolver(signInSchema),
     defaultValues: {
       password: '',
-      name: '',
       email: '',
-      confirmPassword: '',
     },
   })
 
   const { mutate } = useMutation({
-    mutationKey: ['signUp'],
-    mutationFn: (params: TSignUpOutputSchema) => auth.signUp.execute(params),
+    mutationKey: ['signIn'],
+    mutationFn: (params: TSignInSchema) => auth.signIn.execute(params),
   })
 
   const router = useRouter()
 
-  const onHandleSubmit = (formData: TSignUpInputSchema) => {
-    const parsed: TSignUpOutputSchema = signUpSchema.parse(formData)
-    mutate(parsed, {
+  const onHandleSubmit = (formData: TSignInSchema) => {
+    mutate(formData, {
       onError: (err) => {
         toast.error(err.message)
       },
       onSuccess: async () => {
-        toast.success('Conta criada com sucesso')
+        toast.success('Login realizado com sucesso')
         form.reset()
-        await router.push('/auth/sign-in')
+        router.push('/')
       },
     })
   }
@@ -63,20 +57,6 @@ const SignUpForm: FC = () => {
         className={'flex flex-col space-y-4'}
       >
         <CardContent className={'flex flex-col space-y-2'}>
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nome</FormLabel>
-                <FormControl>
-                  <Input placeholder="shadcn" {...field} />
-                </FormControl>
-                <FormDescription>Como devemos te chamar?</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <FormField
             control={form.control}
             name="email"
@@ -107,30 +87,16 @@ const SignUpForm: FC = () => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="confirmPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Confirme a senha</FormLabel>
-                <FormControl>
-                  <PasswordInput placeholder="shadcn" {...field} />
-                </FormControl>
-                <FormDescription>Confirme a sua senha</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
         </CardContent>
         <CardFooter className={'flex flex-col space-y-2'}>
-          <Button block>Cadastrar</Button>
+          <Button block>Entrar</Button>
           <Button
-            onClick={() => router.push('/auth/sign-in')}
+            onClick={() => router.push('/auth/sign-up')}
             type={'button'}
             block
             variant={'secondary'}
           >
-            Já possuo uma conta
+            Criar uma conta
           </Button>
         </CardFooter>
       </form>
@@ -138,4 +104,4 @@ const SignUpForm: FC = () => {
   )
 }
 
-export default SignUpForm
+export default SignInForm
