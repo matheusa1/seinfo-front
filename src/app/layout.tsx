@@ -5,6 +5,7 @@ import './globals.css'
 import { Poppins } from 'next/font/google'
 import ReactQueryContextProvider from '@/app/context/react-query.context'
 import { Toaster } from '@/components/ui/sonner'
+import { AuthContextProvider } from '@/app/context/auth.context'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -25,8 +26,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.className}`}>
         <ReactQueryContextProvider>
-          {children}
-          <Toaster richColors position={'top-right'} closeButton />
+          <AuthContextProvider>
+            {children}
+            <Toaster richColors position={'top-right'} closeButton />
+          </AuthContextProvider>
         </ReactQueryContextProvider>
       </body>
     </html>

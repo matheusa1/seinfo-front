@@ -20,6 +20,7 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { TSignInSchema } from '@/@core/module/auth/domain/sign-in.entity'
 import { signInSchema } from '@/@core/module/auth/schema/sign-in.schema'
+import { useAuth } from '@/app/context/auth.context'
 
 const SignInForm: FC = () => {
   const form = useForm<TSignInSchema>({
@@ -36,16 +37,17 @@ const SignInForm: FC = () => {
   })
 
   const router = useRouter()
+  const { signIn } = useAuth()
 
   const onHandleSubmit = (formData: TSignInSchema) => {
     mutate(formData, {
       onError: (err) => {
         toast.error(err.message)
       },
-      onSuccess: async () => {
+      onSuccess: async (response) => {
         toast.success('Login realizado com sucesso')
         form.reset()
-        router.push('/')
+        signIn(response.access_token)
       },
     })
   }
