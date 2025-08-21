@@ -39,9 +39,7 @@ container
 
 container
   .bind<GenerateKdfUseCase>(registry.GenerateKdfUseCase)
-  .toDynamicValue((context) => {
-    return new GenerateKdfUseCase()
-  })
+  .toConstantValue(new GenerateKdfUseCase())
 
 export const auth = {
   signUp: container.get<SignUpUseCase>(registry.SignUpUseCase),
