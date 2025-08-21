@@ -20,7 +20,7 @@ type TPasswordForm = {
 }
 
 const PasswordForm: FC<TPasswordForm> = ({ setIsOpenModal }) => {
-  const { KDF, signOut } = useAuth()
+  const { KDF } = useAuth()
 
   const form = useForm<TCreateCredential>({
     resolver: zodResolver(createCredentialSchema),
