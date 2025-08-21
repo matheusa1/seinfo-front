@@ -10,10 +10,10 @@ const Header: FC = () => {
   const { signOut, userInfo } = useAuth()
 
   return (
-    <header className={'flex items-center justify-between px-4 py-2'}>
+    <header className={'flex items-center justify-between py-2'}>
       <div className={'flex items-center space-x-4'}>
         <SidebarTrigger />
-        <h3>Olá, {userInfo?.name}</h3>
+        <h4>Olá, {userInfo?.name}</h4>
       </div>
 
       <div className={'flex space-x-4'}>

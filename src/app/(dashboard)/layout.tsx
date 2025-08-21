@@ -11,7 +11,7 @@ const DashboardLayout: FC<TDashboardLayout> = ({ children }) => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className={'flex flex-1 flex-col'}>
+      <main className={'flex flex-1 flex-col px-4'}>
         <Header />
         {children}
       </main>

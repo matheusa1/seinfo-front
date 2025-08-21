@@ -1,18 +1,13 @@
-'use client'
-
-import Link from 'next/link'
-import { useAuth } from '@/app/context/auth.context'
+import PasswordModal from '@/app/(dashboard)/components/password-modal'
 import { Button } from '@/components/ui/button'
 
 export default function Home() {
-  const { signOut, userInfo } = useAuth()
-
   return (
-    <main className={'flex space-x-50 bg-red-500'}>
-      <div>Hello world!</div>
-      <div>Bom dia, {userInfo?.name}</div>
-      <Link href={'/auth/sign-up'}>Tela de cadastro</Link>
-      <Button onClick={signOut}>Sair</Button>
+    <main className={'flex flex-1'}>
+      <header className={'flex h-fit w-full items-center justify-between'}>
+        <h3>Minhas senhas</h3>
+        <PasswordModal actionButton={<Button>Criar nova</Button>} />
+      </header>
     </main>
   )
 }
