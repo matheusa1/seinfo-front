@@ -8,14 +8,18 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useState,
 } from 'react'
 
 import Cookie from 'js-cookie'
 import { useRouter } from 'next/navigation'
+import { TUser } from '@/@core/module/user/domain/user.entity'
+import { user } from '@/@core/module/user/infra/container.registry'
 
 type TAuthContext = {
   signIn: (token: string) => void
   signOut: () => void
+  userInfo?: TUser
 }
 
 const AuthContext = createContext({} as TAuthContext)
@@ -25,13 +29,19 @@ type TAuthContextProvider = {
 }
 
 export const AuthContextProvider: FC<TAuthContextProvider> = ({ children }) => {
+  const [userInfo, setUserInfo] = useState<TUser>()
   const router = useRouter()
 
   const signIn = useCallback(
-    (token: string) => {
+    async (token: string) => {
       Cookie.set('token', token, {
         sameSite: 'strict',
       })
+
+      const userResponse = await user.getUserInfo.execute()
+
+      setUserInfo(userResponse)
+
       router.push('/')
     },
     [router],
@@ -39,6 +49,7 @@ export const AuthContextProvider: FC<TAuthContextProvider> = ({ children }) => {
   const signOut = useCallback(() => {
     Cookie.remove('token')
     router.push('/auth/sign-in')
+    setUserInfo(undefined)
   }, [router])
 
   const getToken = useCallback(() => {
@@ -57,8 +68,9 @@ export const AuthContextProvider: FC<TAuthContextProvider> = ({ children }) => {
     () => ({
       signIn,
       signOut,
+      userInfo,
     }),
-    [signIn, signOut],
+    [signIn, signOut, userInfo],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
