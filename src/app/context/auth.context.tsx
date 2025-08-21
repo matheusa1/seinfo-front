@@ -15,11 +15,13 @@ import Cookie from 'js-cookie'
 import { useRouter } from 'next/navigation'
 import { TUser } from '@/@core/module/user/domain/user.entity'
 import { user } from '@/@core/module/user/infra/container.registry'
+import { auth } from '@/@core/module/auth/infra/container.registry'
 
 type TAuthContext = {
-  signIn: (token: string) => void
+  signIn: (token: string, password: string) => void
   signOut: () => void
   userInfo?: TUser
+  KDF?: Buffer
 }
 
 const AuthContext = createContext({} as TAuthContext)
@@ -30,10 +32,11 @@ type TAuthContextProvider = {
 
 export const AuthContextProvider: FC<TAuthContextProvider> = ({ children }) => {
   const [userInfo, setUserInfo] = useState<TUser>()
+  const [KDF, setKDF] = useState<Buffer>()
   const router = useRouter()
 
   const signIn = useCallback(
-    async (token: string) => {
+    async (token: string, password: string) => {
       Cookie.set('token', token, {
         sameSite: 'strict',
       })
@@ -41,6 +44,13 @@ export const AuthContextProvider: FC<TAuthContextProvider> = ({ children }) => {
       const userResponse = await user.getUserInfo.execute()
 
       setUserInfo(userResponse)
+
+      const generatedKDF = auth.generateKdf.execute(
+        password,
+        userResponse.passkey,
+      )
+
+      setKDF(generatedKDF)
 
       router.push('/')
     },
@@ -50,6 +60,7 @@ export const AuthContextProvider: FC<TAuthContextProvider> = ({ children }) => {
     Cookie.remove('token')
     router.push('/auth/sign-in')
     setUserInfo(undefined)
+    setKDF(undefined)
   }, [router])
 
   const getToken = useCallback(() => {
@@ -69,8 +80,9 @@ export const AuthContextProvider: FC<TAuthContextProvider> = ({ children }) => {
       signIn,
       signOut,
       userInfo,
+      KDF,
     }),
-    [signIn, signOut, userInfo],
+    [signIn, signOut, userInfo, KDF],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

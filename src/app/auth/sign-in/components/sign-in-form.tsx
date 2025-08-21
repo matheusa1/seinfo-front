@@ -5,14 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CardContent, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, } from '@/components/ui/form'
 import { Input, PasswordInput } from '@/components/ui/input'
 import { useMutation } from '@tanstack/react-query'
 import { auth } from '@/@core/module/auth/infra/container.registry'
@@ -47,7 +40,7 @@ const SignInForm: FC = () => {
       onSuccess: async (response) => {
         toast.success('Login realizado com sucesso')
         form.reset()
-        signIn(response.access_token)
+        signIn(response.access_token, formData.password)
       },
     })
   }
