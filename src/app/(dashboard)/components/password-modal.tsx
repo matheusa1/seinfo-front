@@ -10,12 +10,14 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import PasswordForm from '@/app/(dashboard)/components/password-form'
+import { TCredential } from '@/@core/module/credential/domain/credential.entity'
 
 type TPasswordModal = {
   actionButton: ReactNode
+  data?: TCredential
 }
 
-const PasswordModal: FC<TPasswordModal> = ({ actionButton }) => {
+const PasswordModal: FC<TPasswordModal> = ({ actionButton, data }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   return (
@@ -28,7 +30,7 @@ const PasswordModal: FC<TPasswordModal> = ({ actionButton }) => {
             Salve sua senha com as informações abaixo.
           </DialogDescription>
         </DialogHeader>
-        <PasswordForm setIsOpenModal={setIsOpen} />
+        <PasswordForm setIsOpenModal={setIsOpen} data={data} />
       </DialogContent>
     </Dialog>
   )

@@ -38,7 +38,7 @@ function PasswordInput({ className, ...props }: React.ComponentProps<'input'>) {
         {...props}
       />
 
-      <Button onClick={() => setShowPassword((prev) => !prev)}>
+      <Button type={'button'} onClick={() => setShowPassword((prev) => !prev)}>
         {showPassword ? <EyeOff /> : <Eye />}
       </Button>
     </div>

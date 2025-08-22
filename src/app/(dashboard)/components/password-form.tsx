@@ -5,14 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { TCreateCredential } from '@/@core/module/credential/domain/credential.entity'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createCredentialSchema } from '@/@core/module/credential/schema/create.schema'
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, } from '@/components/ui/form'
 import { Input, PasswordInput } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
@@ -24,19 +17,22 @@ import { toast } from 'sonner'
 
 type TPasswordForm = {
   setIsOpenModal: Dispatch<SetStateAction<boolean>>
+  data?: TCreateCredential
 }
 
-const PasswordForm: FC<TPasswordForm> = ({ setIsOpenModal }) => {
+const PasswordForm: FC<TPasswordForm> = ({ setIsOpenModal, data }) => {
   const { KDF } = useAuth()
 
   const form = useForm<TCreateCredential>({
     resolver: zodResolver(createCredentialSchema),
     defaultValues: {
-      password: '',
-      url: '',
-      notes: '',
-      name: '',
-      username: '',
+      password: data?.password
+        ? credential.decryptPassword.execute(data?.password, KDF!)
+        : '',
+      url: data?.url ?? '',
+      notes: data?.notes ?? '',
+      name: data?.name ?? '',
+      username: data?.username ?? '',
     },
   })
 
