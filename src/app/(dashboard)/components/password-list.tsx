@@ -2,16 +2,11 @@
 import { FC, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { credential } from '@/@core/module/credential/infra/container.registry'
-import { useAuth } from '@/app/context/auth.context'
-import { toast } from 'sonner'
-import PasswordModal from '@/app/(dashboard)/components/password-modal'
-import { Button } from '@/components/ui/button'
-import { EditIcon, WindIcon } from 'lucide-react'
-import ConfirmDeletionModal from '@/app/(dashboard)/components/confirm-deletion-modal'
+import { WindIcon } from 'lucide-react'
 import PaginationComponent from '@/components/pagination'
+import PasswordItem from '@/app/(dashboard)/components/password-item'
 
 const PasswordList: FC = () => {
-  const { KDF } = useAuth()
   const [page, setPage] = useState<number>(1)
   const [limit, setLimit] = useState<number>(10)
 
@@ -19,15 +14,6 @@ const PasswordList: FC = () => {
     queryKey: ['CredentialList', page, limit],
     queryFn: () => credential.pagination.execute({ page, limit }),
   })
-
-  const decryptPassword = (encrypted: string) => {
-    try {
-      return credential.decryptPassword.execute(encrypted, KDF!)
-    } catch (err: unknown) {
-      const typedErr = err as Error
-      toast.error(typedErr.message)
-    }
-  }
 
   if (!data || data.data.length === 0) {
     return (
@@ -39,23 +25,9 @@ const PasswordList: FC = () => {
   }
 
   return (
-    <div>
+    <div className={'flex flex-col gap-4'}>
       {data?.data.map((cred) => (
-        <div key={cred.id} className="border-b p-4">
-          <h4 className="text-lg font-semibold">{cred.name}</h4>
-          <p className="text-sm text-gray-600">
-            {cred.password && decryptPassword(cred.password)}
-          </p>
-          <PasswordModal
-            actionButton={
-              <Button size={'icon'} variant={'ghost'}>
-                <EditIcon />{' '}
-              </Button>
-            }
-            data={cred}
-          />
-          <ConfirmDeletionModal id={cred.id} />
-        </div>
+        <PasswordItem data={cred} key={cred.id} />
       ))}
       <PaginationComponent
         page={page}
