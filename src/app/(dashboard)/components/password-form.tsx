@@ -2,7 +2,10 @@
 
 import { Dispatch, FC, SetStateAction } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { TCreateCredential } from '@/@core/module/credential/domain/credential.entity'
+import {
+  TCreateCredential,
+  TCredential,
+} from '@/@core/module/credential/domain/credential.entity'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createCredentialSchema } from '@/@core/module/credential/schema/create.schema'
 import {
@@ -24,11 +27,13 @@ import { toast } from 'sonner'
 
 type TPasswordForm = {
   setIsOpenModal: Dispatch<SetStateAction<boolean>>
-  data?: TCreateCredential
+  data?: TCredential
 }
 
 const PasswordForm: FC<TPasswordForm> = ({ setIsOpenModal, data }) => {
   const { KDF } = useAuth()
+
+  console.log(data)
 
   const form = useForm<TCreateCredential>({
     resolver: zodResolver(createCredentialSchema),
@@ -45,8 +50,13 @@ const PasswordForm: FC<TPasswordForm> = ({ setIsOpenModal, data }) => {
 
   const { mutate } = useMutation({
     mutationKey: ['credentialForm'],
-    mutationFn: (params: TCreateCredential) =>
-      credential.create.execute(params, KDF!),
+    mutationFn: (params: TCreateCredential) => {
+      if (data) {
+        return credential.update.execute(data.id, params, KDF!)
+      }
+
+      return credential.create.execute(params, KDF!)
+    },
   })
 
   const onHandleSubmit = (data: TCreateCredential) => {

@@ -31,7 +31,7 @@ const PasswordList: FC = () => {
         <div key={cred.id} className="border-b p-4">
           <h4 className="text-lg font-semibold">{cred.name}</h4>
           <p className="text-sm text-gray-600">
-            {decryptPassword(cred.password)}
+            {cred.password && decryptPassword(cred.password)}
           </p>
           <PasswordModal
             actionButton={

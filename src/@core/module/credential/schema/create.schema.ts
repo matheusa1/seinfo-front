@@ -6,6 +6,6 @@ export const createCredentialSchema = z.object({
     .nonempty({ error: 'Informe um nome' }),
   password: z.string({ error: 'A senha precisa ser um texto ' }).optional(),
   username: z.string({ error: 'O nome precisa ser um texto' }).optional(),
-  url: z.url({ error: 'Informe uma url válida' }).or(z.literal('')).nullable(),
+  url: z.url({ error: 'Informe uma url válida' }).or(z.literal('')).optional(),
   notes: z.string({ error: 'As notas precisam ser um texto' }).optional(),
 })
