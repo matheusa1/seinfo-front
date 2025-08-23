@@ -8,6 +8,7 @@ import PasswordModal from '@/app/(dashboard)/components/password-modal'
 import { Button } from '@/components/ui/button'
 import { EditIcon, WindIcon } from 'lucide-react'
 import ConfirmDeletionModal from '@/app/(dashboard)/components/confirm-deletion-modal'
+import PaginationComponent from '@/components/pagination'
 
 const PasswordList: FC = () => {
   const { KDF } = useAuth()
@@ -56,6 +57,13 @@ const PasswordList: FC = () => {
           <ConfirmDeletionModal id={cred.id} />
         </div>
       ))}
+      <PaginationComponent
+        page={page}
+        setPage={setPage}
+        limit={limit}
+        setLimit={setLimit}
+        total={data.total}
+      />
     </div>
   )
 }
