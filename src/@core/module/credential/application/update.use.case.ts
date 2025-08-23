@@ -5,18 +5,19 @@ import {
 } from '@/@core/module/credential/domain/credential.entity'
 import { CryptPasswordUseCase } from '@/@core/module/credential/application/crypt-password.use.case'
 
-export class CreateUseCase {
-  crypt = new CryptPasswordUseCase()
+export class UpdateUseCase {
+  hashPasswordUseCase = new CryptPasswordUseCase()
 
   constructor(private readonly gateway: ICredentialGateway) {}
 
-  execute(params: TCreateCredential, KDF: Buffer): Promise<TCredential> {
-    const cryptedPassword =
-      params.password && this.crypt.execute(params.password, KDF)
+  execute(
+    id: string,
+    params: TCreateCredential,
+    KDF: Buffer,
+  ): Promise<TCredential> {
+    const hashedPassword =
+      params.password && this.hashPasswordUseCase.execute(params.password, KDF)
 
-    return this.gateway.create({
-      ...params,
-      password: cryptedPassword,
-    })
+    return this.gateway.update(id, { ...params, password: hashedPassword })
   }
 }

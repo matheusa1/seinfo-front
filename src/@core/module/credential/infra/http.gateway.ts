@@ -22,4 +22,10 @@ export class CredentialHttpGateway implements ICredentialGateway {
 
     return await this.http.get(path)
   }
+
+  async update(id: string, params: TCreateCredential): Promise<TCredential> {
+    const path = paths.update.replace(':id', id)
+
+    return await this.http.patch(path, params)
+  }
 }

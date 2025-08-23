@@ -10,4 +10,5 @@ import {
 export interface ICredentialGateway {
   paginate(params: TGetPagination): Promise<TPagination<TCredential>>
   create(params: TCreateCredential): Promise<TCredential>
+  update(id: string, params: TCreateCredential): Promise<TCredential>
 }
