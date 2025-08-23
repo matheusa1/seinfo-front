@@ -14,7 +14,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { TrashIcon } from 'lucide-react'
 import { FC, useState } from 'react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { credential } from '@/@core/module/credential/infra/container.registry'
 import { toast } from 'sonner'
 
@@ -24,6 +24,7 @@ type TConfirmDeletionModal = {
 
 const ConfirmDeletionModal: FC<TConfirmDeletionModal> = ({ id }) => {
   const [open, setIsOpen] = useState<boolean>(false)
+  const queryClient = useQueryClient()
 
   const { mutate } = useMutation({
     mutationKey: ['deleteCredential'],
@@ -32,8 +33,11 @@ const ConfirmDeletionModal: FC<TConfirmDeletionModal> = ({ id }) => {
 
   const onHandleConfirm = () => {
     mutate(undefined, {
-      onSuccess: () => {
+      onSuccess: async () => {
         toast.success('Credencial apagada com sucesso!')
+        await queryClient.invalidateQueries({
+          queryKey: ['CredentialList'],
+        })
         setIsOpen(false)
       },
       onError: () => {

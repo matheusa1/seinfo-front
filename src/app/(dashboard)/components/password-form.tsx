@@ -2,25 +2,15 @@
 
 import { Dispatch, FC, SetStateAction } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import {
-  TCreateCredential,
-  TCredential,
-} from '@/@core/module/credential/domain/credential.entity'
+import { TCreateCredential, TCredential, } from '@/@core/module/credential/domain/credential.entity'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createCredentialSchema } from '@/@core/module/credential/schema/create.schema'
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, } from '@/components/ui/form'
 import { Input, PasswordInput } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { DialogClose } from '@radix-ui/react-dialog'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { credential } from '@/@core/module/credential/infra/container.registry'
 import { useAuth } from '@/app/context/auth.context'
 import { toast } from 'sonner'
@@ -32,6 +22,7 @@ type TPasswordForm = {
 
 const PasswordForm: FC<TPasswordForm> = ({ setIsOpenModal, data }) => {
   const { KDF } = useAuth()
+  const queryClient = useQueryClient()
 
   console.log(data)
 
@@ -61,8 +52,11 @@ const PasswordForm: FC<TPasswordForm> = ({ setIsOpenModal, data }) => {
 
   const onHandleSubmit = (data: TCreateCredential) => {
     mutate(data, {
-      onSuccess: () => {
+      onSuccess: async () => {
         toast.success('Senha salva com sucesso')
+        await queryClient.invalidateQueries({
+          queryKey: ['CredentialList'],
+        })
         setIsOpenModal(false)
       },
       onError: () => {
