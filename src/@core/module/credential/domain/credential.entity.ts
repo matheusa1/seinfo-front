@@ -5,9 +5,9 @@ export type TCredential = {
   id: string
   userId: string
   name: string
-  password: string
-  username: string
-  url: string
+  password?: string
+  username?: string
+  url?: string
   notes?: string
   createdAt: string
   updatedAt: string
