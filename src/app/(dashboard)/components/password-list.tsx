@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import PasswordModal from '@/app/(dashboard)/components/password-modal'
 import { Button } from '@/components/ui/button'
 import { EditIcon } from 'lucide-react'
+import ConfirmDeletionModal from '@/app/(dashboard)/components/confirm-deletion-modal'
 
 const PasswordList: FC = () => {
   const { KDF } = useAuth()
@@ -41,6 +42,7 @@ const PasswordList: FC = () => {
             }
             data={cred}
           />
+          <ConfirmDeletionModal id={cred.id} />
         </div>
       ))}
     </div>
