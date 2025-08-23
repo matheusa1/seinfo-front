@@ -42,10 +42,7 @@ const PasswordItem: FC<TPasswordItem> = ({ data }) => {
         {data.password && (
           <div className={'flex flex-col space-y-1'}>
             <Label>Senha</Label>
-            <PasswordInput
-              value={decryptPassword(data.password)}
-              contentEditable={'plaintext-only'}
-            />
+            <PasswordInput value={decryptPassword(data.password)} readOnly />
           </div>
         )}
       </div>

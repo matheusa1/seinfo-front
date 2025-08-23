@@ -5,6 +5,7 @@ import { SidebarTrigger } from '@/components/ui/sidebar'
 import { useAuth } from '@/app/context/auth.context'
 import { Button } from '@/components/ui/button'
 import { LogOutIcon } from 'lucide-react'
+import { ThemeToggleButton } from '@/components/theme-toggle'
 
 const Header: FC = () => {
   const { signOut, userInfo } = useAuth()
@@ -17,6 +18,7 @@ const Header: FC = () => {
       </div>
 
       <div className={'flex space-x-4'}>
+        <ThemeToggleButton />
         <Button size={'icon'} onClick={signOut} variant={'ghost'}>
           <LogOutIcon />
         </Button>
