@@ -46,8 +46,8 @@ const SignInForm: FC = () => {
       },
       onSuccess: async (response) => {
         toast.success('Login realizado com sucesso')
-        form.reset()
         signIn(response.access_token, formData.password)
+        form.reset()
       },
     })
   }
