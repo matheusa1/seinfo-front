@@ -28,4 +28,9 @@ export class CredentialHttpGateway implements ICredentialGateway {
 
     return await this.http.patch(path, params)
   }
+
+  delete(id: string): Promise<void> {
+    const path = paths.delete.replace(':id', id)
+    return this.http.delete(path)
+  }
 }

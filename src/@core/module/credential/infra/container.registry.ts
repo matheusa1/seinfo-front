@@ -7,6 +7,7 @@ import { CreateUseCase } from '../application/create.use.case'
 import { PaginationUseCase } from '../application/pagination.use.case'
 import { DecryptPasswordUseCase } from '../application/decrypt-password.use.case'
 import { UpdateUseCase } from '../application/update.use.case'
+import { DeleteUseCase } from '../application/delete.use.case'
 
 const registry = {
   HTTP: Symbol.for('HTTP'),
@@ -16,6 +17,7 @@ const registry = {
   PaginationUseCase: Symbol.for('PaginationUseCase'),
   DecryptPasswordUseCase: Symbol.for('DecryptPasswordUseCase'),
   UpdateUseCase: Symbol.for('UpdateUseCase'),
+  DeleteUseCase: Symbol.for('DeleteUseCase'),
 }
 
 const container = new Container()
@@ -50,6 +52,12 @@ container
     (context) => new UpdateUseCase(context.get(registry.CredentialHttpGateway)),
   )
 
+container
+  .bind<DeleteUseCase>(registry.DeleteUseCase)
+  .toDynamicValue(
+    (context) => new DeleteUseCase(context.get(registry.CredentialHttpGateway)),
+  )
+
 export const credential = {
   create: container.get<CreateUseCase>(registry.CreateUseCase),
   pagination: container.get<PaginationUseCase>(registry.PaginationUseCase),
@@ -57,4 +65,5 @@ export const credential = {
     registry.DecryptPasswordUseCase,
   ),
   update: container.get<UpdateUseCase>(registry.UpdateUseCase),
+  delete: container.get<DeleteUseCase>(registry.DeleteUseCase),
 }
