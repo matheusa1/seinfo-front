@@ -35,7 +35,7 @@ export default function RootLayout({
           <ReactQueryContextProvider>
             <AuthContextProvider>
               {children}
-              <Toaster richColors position={'top-right'} closeButton />
+              <Toaster richColors position={'top-center'} closeButton />
             </AuthContextProvider>
           </ReactQueryContextProvider>
         </ThemeProvider>
